@@ -1,0 +1,70 @@
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY3VzdG9tLmNzcyIsInNvdXJjZXMiOlsiY3VzdG9tLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiJ9 */
+
+/*# sourceMappingURL=custom.css.map */
+label.error{
+	color:red;
+}
+.main-sidebar .sidebar-brand a .logo-name {
+    letter-spacing: 0;
+}
+.main-sidebar .sidebar-brand a .header-logo {
+    height: 40px;
+}
+.main-sidebar .sidebar-brand a .logo-name img {
+    width: 170px;
+}
+input[type="date"] {
+    position: relative;
+}
+
+/* create a new arrow, because we are going to mess up the native one
+see "List of symbols" below if you want another, you could also try to add a font-awesome icon.. */
+input[type="date"]:after {
+    content: "\25BC"; 
+    color: #555;
+    padding: 0 5px;
+}
+
+/* change color of symbol on hover */
+input[type="date"]:hover:after {
+    color: #bf1400;
+}
+
+/* make the native arrow invisible and stretch it over the whole field so you can click anywhere in the input field to trigger the native datepicker*/
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    color: transparent;
+    background: transparent;
+}
+
+/* adjust increase/decrease button */
+input[type="date"]::-webkit-inner-spin-button {
+    z-index: 1;
+}
+
+ /* adjust clear button */
+ input[type="date"]::-webkit-clear-button {
+     z-index: 1;
+ }
+
+ .parent_option{
+     color :#0B0000;
+ }
+
+ table.dataTable tfoot th, table.dataTable tfoot td {
+    /* padding: 10px 18px 6px 18px; */
+    border-top: 1px solid #111;
+    background-color: rgba(0,0,0,0.04);
+    color: #666;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top: 1px solid #ddd !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {background-color: transparent !important;background: transparent !important;box-shadow:none !important;}
