@@ -20,17 +20,17 @@ class Auth extends MY_Controller
             $username = trim($_REQUEST['username']);
             $password = md5(trim($_REQUEST['password']));
             $table = 'users as u';
-            $fields = 'u.id,u.email,r.role_id,r.role_name';
+            $fields = 'u.user_id,u.email,r.role_id,r.role_name';
             $join = array(
                 'left' => array(
-                    'user_to_role as ur' => 'u.id = ur.user_id',
+                    'user_to_role as ur' => 'u.user_id = ur.user_id',
                     'roles as r' => 'r.role_id = ur.role_id'
                 ),
             );
             $where = array('u.username' => $username, 'u.password' => $password);
             $res = $this->auth->get_specified_row($where, $fields, $table, $join);
             if (!empty($res)) {
-                $_SESSION['admin']['user_id'] = $res['id'];
+                $_SESSION['admin']['user_id'] = $res['user_id'];
                 $_SESSION['admin']['email'] = $res['email'];
                 $_SESSION['admin']['role_id'] = $res['role_id'];
                 $_SESSION['admin']['role_name'] = $res['role_name'];

@@ -11,10 +11,10 @@ class MY_Controller extends CI_Controller
         if ($data == '') {
             $data = [];
         }
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
+        $this->load->view('admin/templates/header', $data);
+        $this->load->view('admin/templates/sidebar', $data);
         $this->load->view($view, $data);
-        $this->load->view('templates/footer', $data);
+        $this->load->view('admin/templates/footer', $data);
     }
 
     public function check_email_exist($email)
