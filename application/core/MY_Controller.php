@@ -91,7 +91,31 @@ class MY_Controller extends CI_Controller
         return $fullname;
     }
 
+    public function check_unique_category_slug($slug, $category_id = '')
+    {
+        $query = "select count(category_id) as count from category where slug='$slug'";
+        if ($category_id != '') {
+            $query .= " and category_id!=$category_id";
+        }
+        $res = $this->db->query($query)->row()->count;
+        if ($res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
+    public function delete_image($path, $file)
+    {
+        $img_path = FCPATH . "/" . $path . $file;
+        $thumb = FCPATH . $path . "thumb/" . $file;
+        if (file_exists($img_path)) {
+            unlink($img_path);
+        }
+        if (file_exists($thumb)) {
+            unlink($thumb);
+        }
+    }
 
     public function get_day_in_number()
     {
@@ -112,5 +136,90 @@ class MY_Controller extends CI_Controller
         } else if ($weekday = 'Saturday') {
             return 6;
         }
+    }
+
+    public function slugify($text)
+    {
+        // replace non letter or digits by -
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
+    }
+    public function upload_image($image, $path, $thumb_w = 175, $thumb_h = 175)
+    {
+        if (!empty($_FILES[$image]['name'])) {
+            if (!file_exists($path . "thumb")) {
+                mkdir($path . "thumb", 0777, true);
+            }
+            $file_name = time() . $_FILES[$image]['name'];
+            $config = array();
+            $config['upload_path'] = FCPATH . '/' . $path;
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['file_name'] = $file_name;
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            if (!$this->upload->do_upload($image)) {
+                $error = array('error' => $this->upload->display_errors());
+                $response = array("status" => 0, "error" => $error);
+            } else {
+                $uploaded_file = $this->upload->data()['file_name'];
+                //*create thumbnail //
+                $thumb = array();
+                $thumb['image_library'] = 'gd2';
+                $thumb['source_image'] = FCPATH . '/' . $path . $file_name;
+                $thumb['new_image'] = FCPATH . '/' . $path . 'thumb/'; // path where you want to save thumnail
+                $thumb['create_thumb'] = TRUE;
+                $thumb['thumb_marker'] = '';
+                $thumb['maintain_ratio'] = TRUE;
+                $thumb['width']         = $thumb_w;
+                $thumb['height']       = $thumb_h;
+                $this->load->library('image_lib', $thumb);
+                $this->image_lib->initialize($thumb);
+                $this->image_lib->resize();
+                $this->image_lib->clear();
+                //create thumbanil
+                $response = array("status" => 1, "filename" => $uploaded_file);
+            }
+        }
+        return $response;
+    }
+
+    protected function getCategoryTree($level = 0, $prefix = '')
+    {
+        global $category_tree;
+        $rows = $this->db
+            ->select('category_id,parent_id,name')
+            ->where('parent_id', $level)
+            ->order_by('category_id', 'asc')
+            ->get('category')
+            ->result();
+
+
+        if (count($rows) > 0) {
+            foreach ($rows as $row) {
+                $category_tree[$row->category_id] = $prefix . $row->name;
+                $this->getCategoryTree($row->category_id, $prefix . '--');
+            }
+        }
+        return $category_tree;
     }
 }
