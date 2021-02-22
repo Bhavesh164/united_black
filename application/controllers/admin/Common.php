@@ -111,5 +111,111 @@ class Common extends MY_Controller
 
     public function create_attribute()
     {
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "attribute_name" => trim($_REQUEST['attribute_name']),
+                "display_name" => trim($_REQUEST['display_name']),
+            ];
+            if (empty($error)) {
+                $table = 'attribute';
+                $result = $this->common->insert($fieldvalues, $table);
+                $this->session->set_flashdata('success', 'Attribute added successfully');
+                redirect('admin/common/create_attribute');
+            }
+        }
+        $this->template('admin/attribute/add');
+    }
+
+    public function attributes()
+    {
+        $orderBy = array('attribute_id' => 'desc');
+        $data['attributes'] = $this->common->get_all_rows(false, false, 'attribute', false, $orderBy);
+        $this->template('admin/attribute/list', $data);
+    }
+
+    public function edit_attribute()
+    {
+        $attribute_id = $this->uri->segment(4);
+        $where = array("attribute_id" => $attribute_id);
+        $data['attribute'] = $this->common->get_specified_row($where, false, 'attribute');
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "attribute_name" => trim($_REQUEST['attribute_name']),
+                "display_name" => trim($_REQUEST['display_name']),
+            ];
+            if (empty($error)) {
+                $table = 'attribute';
+                $usingCondition = ['attribute_id' => $attribute_id];
+                $this->common->update($fieldvalues, $usingCondition, $table);
+                $this->session->set_flashdata('success', 'Attribute updated successfully');
+                redirect('admin/common/edit_attribute/' . $attribute_id);
+            } else {
+                $error = implode("\n", $error);
+                $this->session->set_flashdata('error', $error);
+                redirect('admin/common/edit_attribute/' . $attribute_id);
+            }
+        }
+        $this->template('admin/attribute/edit', $data);
+    }
+
+    public function attribute_values()
+    {
+        $orderBy = array('attribute_value_id' => 'desc');
+        $attribute_id = $this->uri->segment(4);
+        $data['attribute_name'] = $this->db->query("select attribute_name from attribute where attribute_id='$attribute_id'")->row()->attribute_name;
+        $where = array("attribute_id" => $attribute_id);
+        $data['attribute_values'] = $this->common->get_all_rows($where, false, 'attribute_value', false, $orderBy);
+        $this->template('admin/attribute_value/list', $data);
+    }
+
+    public function attributes_value_add()
+    {
+        $attribute_id = $this->uri->segment(4);
+        $data['attribute_id'] = $attribute_id;
+        $data['attribute_name'] = $this->db->query("select attribute_name from attribute where attribute_id='$attribute_id'")->row()->attribute_name;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "attribute_id" => trim($attribute_id),
+                "attribute_value" => trim($_REQUEST['attribute_value']),
+            ];
+            if (empty($error)) {
+                $table = 'attribute_value';
+                $result = $this->common->insert($fieldvalues, $table);
+                $this->session->set_flashdata('success', 'Attribute Value added successfully');
+                redirect('admin/common/attributes_value_add/' . $attribute_id);
+            }
+        }
+        $this->template('admin/attribute_value/add', $data);
+    }
+
+    public function edit_attribute_value()
+    {
+        $attribute_value_id = $this->uri->segment(4);
+
+        $where = array("attribute_value_id" => $attribute_value_id);
+        $data['attribute_value'] = $this->common->get_specified_row($where, false, 'attribute_value');
+        $data['attribute_name'] = $this->db->query("select attribute_name from attribute where attribute_id='{$data['attribute_value']['attribute_id']}'")->row()->attribute_name;
+        $this->template('admin/attribute_value/edit', $data);
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "attribute_value" => trim($_REQUEST['attribute_value']),
+            ];
+            if (empty($error)) {
+                $table = 'attribute_value';
+                $usingCondition = ['attribute_value_id' => $attribute_value_id];
+                $this->common->update($fieldvalues, $usingCondition, $table);
+                $this->session->set_flashdata('success', 'Attribute value updated successfully');
+                redirect('admin/common/edit_attribute_value/' . $attribute_value_id);
+            } else {
+                $error = implode("\n", $error);
+                $this->session->set_flashdata('error', $error);
+                redirect('admin/common/edit_attribute_value/' . $attribute_value_id);
+            }
+        }
     }
 }

@@ -222,4 +222,16 @@ class MY_Controller extends CI_Controller
         }
         return $category_tree;
     }
+
+    public function country()
+    {
+        $res = $this->db->query("select * from country")->result();
+        return $res;
+    }
+
+    public function state($country_id)
+    {
+        $res = $this->db->query("select * from state where country_id='$country_id'")->result();
+        return $res;
+    }
 }

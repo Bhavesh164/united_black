@@ -22,6 +22,17 @@
 </html>
 
 <script>
+  $(function() {
+    var current = window.location.href;
+    $('ul li a').each(function() {
+      var $this = $(this);
+      // if the current path is like this link, make it active
+      if ($this.attr('href') == current) {
+        $this.parent().addClass('active');
+        $this.parent().closest('ul').closest('li').addClass('active');
+      }
+    })
+  })
   if (window.history.replaceState) {
     window.history.replaceState(null, null, window.location.href);
   }

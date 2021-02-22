@@ -18,7 +18,14 @@
 				<a href="#" class="nav-link has-dropdown"><i data-feather="command"></i><span>Catalog</span></a>
 				<ul class="dropdown-menu">
 					<li><a class="nav-link" href="<?= base_url('admin/common/categories') ?>">Categories</a></li>
-					<li><a class="nav-link" href="<?= base_url('admin/common/create_attribute') ?>">Attributes</a></li>
+					<li><a class="nav-link" href="<?= base_url('admin/common/attributes') ?>">Attributes</a></li>
+				</ul>
+			</li>
+
+			<li class="dropdown">
+				<a href="#" class="nav-link has-dropdown"><i data-feather="command"></i><span>Seller</span></a>
+				<ul class="dropdown-menu">
+					<li><a class="nav-link" href="<?= base_url('admin/seller/add') ?>">Seller</a></li>
 				</ul>
 			</li>
 		</ul>
