@@ -218,4 +218,54 @@ class Common extends MY_Controller
             }
         }
     }
+
+    public function tags()
+    {
+        $orderBy = array('tag_id' => 'desc');
+        $data['tags'] = $this->common->get_all_rows(false, false, 'tag', false, $orderBy);
+        $this->template('admin/tag/list', $data);
+    }
+
+    public function add_tag()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "tag_name" => trim($_REQUEST['tag_name']),
+            ];
+            if (empty($error)) {
+                $table = 'tag';
+                $result = $this->common->insert($fieldvalues, $table);
+                $this->session->set_flashdata('success', 'Tag added successfully');
+                redirect('admin/common/add_tag');
+            }
+        }
+        $this->template('admin/tag/add');
+    }
+
+    public function edit_tag()
+    {
+        $tag_id = $this->uri->segment(4);
+
+        $where = array("tag_id" => $tag_id);
+        $data['tag'] = $this->common->get_specified_row($where, false, 'tag');
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $error = [];
+            $fieldvalues = [
+                "tag_name" => trim($_REQUEST['tag_name']),
+            ];
+            if (empty($error)) {
+                $table = 'tag';
+                $usingCondition = ['tag_id' => $tag_id];
+                $this->common->update($fieldvalues, $usingCondition, $table);
+                $this->session->set_flashdata('success', 'Tag updated successfully');
+                redirect('admin/common/edit_tag/' . $tag_id);
+            } else {
+                $error = implode("\n", $error);
+                $this->session->set_flashdata('error', $error);
+                redirect('admin/common/edit_tag/' . $tag_id);
+            }
+        }
+        $this->template('admin/tag/edit', $data);
+    }
 }

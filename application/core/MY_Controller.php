@@ -229,9 +229,51 @@ class MY_Controller extends CI_Controller
         return $res;
     }
 
-    public function state($country_id)
+    public function state_with_ajax()
     {
+        $html = '<option>Please Select</option>';
+        $country_id = $_REQUEST['country_id'];
         $res = $this->db->query("select * from state where country_id='$country_id'")->result();
-        return $res;
+        foreach ($res as $key => $value) {
+            $html .= "<option value='$value->state_id'>$value->name</option>";
+        }
+        echo $html;
+    }
+
+    public function check_seller_email()
+    {
+        $email = $_REQUEST['email'];
+        $query = "select seller_id from seller where email='{$email}'";
+        if (isset($_REQUEST['seller_id'])) {
+            $seller_id = $_REQUEST['seller_id'];
+            $query .= " and seller_id!=" . $seller_id;
+        }
+        $res = $this->db->query($query)->result();
+        if (empty($res)) {
+            echo "true";
+        } else {
+            echo "false";
+        }
+    }
+
+    public function check_seller_username()
+    {
+        $username = $_REQUEST['username'];
+        $query = "select seller_id from seller where username='{$username}'";
+        if (isset($_REQUEST['seller_id'])) {
+            $seller_id = $_REQUEST['seller_id'];
+            $query .= " and seller_id!=" . $seller_id;
+        }
+        $res = $this->db->query($query)->result();
+        if (empty($res)) {
+            echo "true";
+        } else {
+            echo "false";
+        }
+    }
+
+    public function current_date()
+    {
+        return date("Y-m-d H:i:s");
     }
 }

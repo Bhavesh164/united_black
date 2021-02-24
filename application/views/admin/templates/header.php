@@ -22,6 +22,10 @@
 	<link rel='shortcut icon' type='image/x-icon' href='<?php echo base_url(); ?>assets/img/favicon.ico' />
 	<!-- General JS Scripts -->
 	<script src="<?php echo base_url(); ?>assets/js/app.min.js"></script>
+	<!-- Template JS File -->
+	<script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
+	<!-- Custom JS File -->
+	<script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
 </head>
 
 <body>
