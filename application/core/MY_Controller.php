@@ -276,4 +276,35 @@ class MY_Controller extends CI_Controller
     {
         return date("Y-m-d H:i:s");
     }
+
+    public function buildCategory($parent, $category, $counter = 0)
+    {
+        $html = "";
+        if (isset($category['parent_cats'][$parent])) {
+            if ($counter == 0) {
+                $html .= "<ul id='product_catchecklist' class='form-no-clear list-unstyled'>\n";
+            } else {
+                $html .= "<ul>\n";
+            }
+            foreach ($category['parent_cats'][$parent] as $cat_id) {
+                if (!isset($category['parent_cats'][$cat_id])) {
+                    $html .= "<li>\n  <label><input type='checkbox'  value='" . $category['categories'][$cat_id]['category_id'] . "'>" . $category['categories'][$cat_id]['name'] . "</label>\n</li> \n";
+                }
+                if (isset($category['parent_cats'][$cat_id])) {
+                    $html .= "<li>\n  <label><input type='checkbox' value='" . $category['categories'][$cat_id]['category_id'] . "'>" . $category['categories'][$cat_id]['name'] . "</label>\n \n";
+                    $html .= $this->buildCategory($cat_id, $category, $counter);
+                    $html .= "</li> \n";
+                }
+                $counter++;
+            }
+            $html .= "</ul> \n";
+        }
+        return $html;
+    }
+
+    public function tags()
+    {
+        $res = $this->db->query('select * from tag')->result();
+        return $res;
+    }
 }

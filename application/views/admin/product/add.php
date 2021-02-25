@@ -230,30 +230,7 @@
                         <div class="card-body">
 
                             <div class="product_categories">
-                                <ul id="product_catchecklist" class="form-no-clear list-unstyled">
-                                    <li id="product_cat-15" class="">
-                                        <label class="">
-                                            <input value="15" type="checkbox" name="" id="" checked="checked">
-                                            Uncategorized
-                                        </label>
-                                    </li>
-                                    <li id="">
-                                        <label class="">
-                                            <input value="17" type="checkbox" name="" id="">
-                                            Electronics
-                                        </label>
-                                        <ul class="">
-                                            <li id="">
-                                                <label class="">
-                                                    <input value="18" type="checkbox" name="" id=""> Phones
-                                                </label>
-                                                <ul class="">
-                                                    <li><label for=""><input type="checkbox" name="" id=""> Nokia</label></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
+                                <?php echo $category_view; ?>
                             </div>
                             <a href="<?= base_url('admin/common/create_category') ?>" class="href">+ Add New Category</a>
                         </div>
@@ -265,10 +242,28 @@
                         </div>
                         <div class="card-body">
                             <select name="product_tags" id="product_tags" class="form-control" multiple>
-                                <option value="John">John</option>
-                                <option value="Brian">Brian</option>
-                                <option value="Carl">Carl</option>
+                                <?php foreach ($tags as $key => $value) { ?>
+                                    <option value="<?= $value->tag_id ?>"><?= $value->tag_name ?></option>
+                                <?php } ?>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h4>Product Image</h4>
+                        </div>
+                        <div class="card-body">
+                            <input type="file" name="product_image" id="product_image" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h4>Product Gallery</h4>
+                        </div>
+                        <div class="card-body">
+                            <input type="file" name="product_gallery" id="product_gallery" class="form-control" multiple>
                         </div>
                     </div>
                 </div>
