@@ -5,7 +5,7 @@
                 <div class="col-12 col-lg-9">
                     <div class="form-group">
                         <label for="">Product Name</label>
-                        <input type="text" class="form-control" placeholder="Product Name">
+                        <input type="text" class="form-control" placeholder="Product Name" required>
                     </div>
                     <div class="form-group">
                         <label for="">Short Description</label>
@@ -85,67 +85,26 @@
                                                 <div class="tab-pane fade" id="list-attribute" role="tabpanel" aria-labelledby="list-attribute-list">
                                                     <div class="d-flex w-50 mb-3">
                                                         <select name="attribute_list" id="attribute_list" class="form-control">
-                                                            <option value="0">First</option>
-                                                            <option value="1">Second</option>
+                                                            <option value="">Please Select</option>
+                                                            <?php foreach ($attributes as $key => $value) { ?>
+                                                                <option value="<?= $value->attribute_id ?>"><?= $value->attribute_name ?></option>
+                                                            <?php } ?>
                                                         </select>
-                                                        <button class="btn btn-primary ml-2">Add</button>
+                                                        <a href="javascript:void(0)" onclick="add_attribute(event);" class="btn btn-primary ml-2">Add</a>
                                                     </div>
-                                                    <div id="accordion">
-                                                        <div class="accordion customAccordian">
-                                                            <div class="accordion-header clearfix" role="button" data-toggle="collapse" data-target="#panel-body-1" aria-expanded="true">
-                                                                <h4>Panel 1</h4>
-                                                                <div class="caret-remove">
-                                                                    <span class="down-caret"></span>
-                                                                    <a href="javascript:void(0)" class="remove_row delete">Remove</a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-1" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion">
-                                                            <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-2">
-                                                                <h4>Panel 2</h4>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-2" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="accordion">
-                                                            <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-3">
-                                                                <h4>Panel 3</h4>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-3" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
-                                                        </div>
+                                                    <div id="accordion" class="accordian-attribute-div">
+
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="list-variation" role="tabpanel" aria-labelledby="list-variation-list">
 
                                                     <div class="d-flex w-50 mb-3">
-                                                        <select name="varit" id="attribute_list" class="form-control">
-                                                            <option value="0">Add Variation</option>
+                                                        <select name="variation_add" id="variation_add" class="form-control">
                                                             <option value="1">Create Variation From all attribute</option>
                                                         </select>
-                                                        <a href="javascript:void(0)" class="btn btn-primary ml-2">GO</a>
+                                                        <a href="javascript:void(0)" onclick="create_variation()" class="btn btn-primary ml-2">GO</a>
                                                     </div>
-                                                    <div id="accordion">
+                                                    <div id="accordion" class="accordian-variation-div">
                                                         <div class="accordion customAccordian">
                                                             <div class="accordion-header clearfix" role="button" data-toggle="collapse" data-target="#panel-body-1" aria-expanded="true">
                                                                 <label for="">Size</label>
@@ -266,6 +225,18 @@
                             <input type="file" name="product_gallery" id="product_gallery" class="form-control" multiple>
                         </div>
                     </div>
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h4>Seller</h4>
+                        </div>
+                        <div class="card-body">
+                            <select name="seller_id" id="seller_id" class="form-control">
+                                <?php foreach ($seller as $key => $value) { ?>
+                                    <option value="<?= $value->seller_id ?>"><?= $value->seller_name ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
@@ -282,4 +253,54 @@
             placeholder: "Please Select",
         });
     });
+
+    function add_attribute(event) {
+        var attribute_id = $("#attribute_list").val();
+        var requesturl = "<?= base_url('admin/product/generate_attribute_list') ?>";
+        $.ajax({
+            url: requesturl,
+            data: {
+                attribute_id: attribute_id
+            },
+            type: "post",
+            success: function(data) {
+                $("#attribute_list").find("[value='" + attribute_id + "']").prop("disabled", true);
+                $(".accordian-attribute-div").prepend(data);
+            }
+        });
+    }
+
+    $(document).on('click', '.delete_attribute', function() {
+        var attribute_id = $(this).attr('data-id');
+        var res = confirm("Are you sure you want to delete. All the variations associated with it will be deleted ?");
+        if (res) {
+            $(this).closest('.customAccordian').remove();
+            $("#attribute_list").find("[value='" + attribute_id + "']").prop("disabled", false);
+        }
+    });
+
+    function create_variation() {
+        create_variation_from_attributes();
+    }
+
+    function create_variation_from_attributes() {
+        $(".accordian-variation-div").empty();
+        var variation_object = [];
+        $(".accordian-attribute-div .customAccordian").each(function(index, value) {
+            var that = $(this);
+            var select_label = $(this).find('h4').text();
+            var select_options = [];
+            var select_value = [];
+            $(this).find("input[name='attribute_value_ids[]']:checked").each(function() {
+                select_options.push($(this).val());
+                select_value.push($(this).attr('data-attribute-name'));
+            });
+            variation_object.push({
+                label: select_label,
+                option: select_options,
+                option_value: select_value
+            });
+        });
+        console.log(variation_object);
+    }
 </script>

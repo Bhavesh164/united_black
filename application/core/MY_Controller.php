@@ -307,4 +307,22 @@ class MY_Controller extends CI_Controller
         $res = $this->db->query('select * from tag')->result();
         return $res;
     }
+
+    public function get_seller()
+    {
+        $res = $this->db->query("select seller_id,concat(fname,' ',lname) as seller_name from seller where is_active='1'")->result();
+        return $res;
+    }
+
+    public function get_attributes()
+    {
+        $res = $this->db->query("select * from attribute")->result();
+        return $res;
+    }
+
+    public function get_attribute_values_from_attribute_id($attribute_id)
+    {
+        $res = $this->db->query("select * from attribute_value where attribute_id='$attribute_id'")->result();
+        return $res;
+    }
 }

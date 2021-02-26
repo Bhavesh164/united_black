@@ -3,10 +3,11 @@
 
 
 <!-- Mirrored from radixtouch.in/templates/admin/aegis/source/light/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 May 2020 09:29:50 GMT -->
+
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Lechat Lotto - Admin </title>
+  <title>United Black - Admin </title>
   <!-- General CSS Files -->
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/css/app.min.css">
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/bundles/bootstrap-social/bootstrap-social.css">
@@ -25,8 +26,8 @@
       <div class="container mt-5">
         <div class="row">
           <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-            <?php if(!empty($this->session->flashdata('error'))){ ?>
-                <div class='alert alert-danger'><?php echo $this->session->flashdata('error'); ?></div>
+            <?php if (!empty($this->session->flashdata('error'))) { ?>
+              <div class='alert alert-danger'><?php echo $this->session->flashdata('error'); ?></div>
             <?php } ?>
             <div class="card card-primary">
               <div class="card-header">
@@ -104,10 +105,11 @@
 
 
 <!-- Mirrored from radixtouch.in/templates/admin/aegis/source/light/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 04 May 2020 09:29:50 GMT -->
+
 </html>
 
 <script>
-    if ( window.history.replaceState ) {
-        window.history.replaceState( null, null, window.location.href );
-    }
+  if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+  }
 </script>
