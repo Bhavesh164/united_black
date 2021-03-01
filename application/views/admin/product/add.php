@@ -302,5 +302,79 @@
             });
         });
         console.log(variation_object);
+        let variations = variation_object[0];
+        if (variation_object.length > 1) {
+            for (let i in variation_object)
+                if (i > 0) {
+                    variations = add_variations_to_array(variations, variation_object[i]);
+                }
+        }
+        var generate_html = '';
+        console.log(variations);
+        $.each(variations.option, function(index, valuei) {
+            generate_html += `<div class='accordion customAccordian'>
+                          <div class='accordion-header clearfix' role='button' data-toggle='collapse' data-target='#panel-body-${index}' aria-expanded='true'>`;
+            var option_id = variations.option[index];
+            var option_name = variations.option_value[index];
+            option_id = variations.option[index].split("&-");
+            option_name = variations.option_value[index].split("&-");
+            console.log(option_id);
+            console.log(option_name);
+            $.each(option_id, function(index1, valuei1) {
+                generate_html += `<label>${variation_object[index1].label}</label>`;
+                generate_html += `<select name="attribute_${variation_object[index1].option[index1]}[${index}]" readonly>`;
+                $.each(variation_object[index1].option, function(index2, valuei2) {
+                    if (valuei2 == valuei1) {
+                        generate_html += `<option value='${valuei2}' selected>${variation_object[index1].option_value[index2]}</option>`;
+                    } else {
+                        generate_html += `<option value='${valuei2}'>${variation_object[index1].option_value[index2]}</option>`;
+                    }
+                });
+                generate_html += `</select>`;
+            });
+            generate_html += `<div class="caret-remove">
+                            <span class="down-caret"></span>
+                            <a href="javascript:void(0)" class="remove_row delete">Remove</a>
+                        </div>
+                    </div>
+                    <div class="accordion-body collapse" id="panel-body-1" data-parent="#accordion">
+                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </p>
+                    </div>
+                    </div>`;
+        });
+        console.log("html" + generate_html);
+        $(".accordian-variation-div").html(generate_html);
+    }
+
+
+    function add_variations_to_array(base, variations) {
+        let ret = [];
+        var option = [];
+        var option_value = [];
+
+
+        for (let e of base.option) {
+            for (let variation of variations.option) {
+
+                option.push(e + "&-" + variation);
+            }
+        }
+        for (let e of base.option_value) {
+            for (let variation of variations.option_value) {
+
+                option_value.push(e + "&-" + variation);
+            }
+        }
+        ret = {
+            option: option,
+            option_value: option_value
+        };
+        return ret;
     }
 </script>

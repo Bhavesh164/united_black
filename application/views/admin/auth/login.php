@@ -37,7 +37,9 @@
                 <form method="POST" action="<?php echo base_url() ?>admin/auth/check_login" class="needs-validation" novalidate="">
                   <div class="form-group">
                     <label for="email">Username</label>
-                    <input id="text" type="username" class="form-control" name="username" tabindex="1" required autofocus>
+                    <input id="text" type="username" class="form-control" name="username" tabindex="1" required autofocus value="<?php if (isset($_COOKIE['username_remember'])) {
+                                                                                                                                    echo $_COOKIE['username_remember'];
+                                                                                                                                  } ?>">
                     <div class="invalid-feedback">
                       Please fill in your email
                     </div>
@@ -51,7 +53,9 @@
                         </a>
                       </div>
                     </div>
-                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+                    <input id="password" type="password" class="form-control" name="password" tabindex="2" required value="<?php if (isset($_COOKIE['password_remember'])) {
+                                                                                                                              echo $_COOKIE['password_remember'];
+                                                                                                                            } ?>">
                     <div class="invalid-feedback">
                       please fill in your password
                     </div>

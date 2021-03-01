@@ -11,7 +11,11 @@ class Auth extends MY_Controller
 
     public function login()
     {
-        $this->load->view('admin/auth/login');
+        if (!isset($_SESSION['admin'])) {
+            $this->load->view('admin/auth/login');
+        } else {
+            redirect('admin/profile');
+        }
     }
 
     public function check_login()
@@ -34,6 +38,10 @@ class Auth extends MY_Controller
                 $_SESSION['admin']['email'] = $res['email'];
                 $_SESSION['admin']['role_id'] = $res['role_id'];
                 $_SESSION['admin']['role_name'] = $res['role_name'];
+                if (isset($_REQUEST['remember'])) {
+                    $this->input->set_cookie('username_remember', $username, 86400 * 30);
+                    $this->input->set_cookie('password_remember', trim($_REQUEST['password']), 86400 * 30);
+                }
                 redirect('admin/profile');
             } else {
                 $this->session->set_flashdata('error', 'Wrong Username or Password');
