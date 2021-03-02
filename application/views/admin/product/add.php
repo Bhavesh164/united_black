@@ -1,11 +1,16 @@
+<style>
+    select+.select2-container {
+        width: 100% !important;
+    }
+</style>
 <div class="main-content">
     <section class="section">
-        <form action="" method="post" id="product_form">
+        <form action="" method="post" id="product_form" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <div class="form-group">
                         <label for="">Product Name</label>
-                        <input type="text" class="form-control" placeholder="Product Name" required>
+                        <input type="text" name="product_name" class="form-control" placeholder="Product Name" required>
                     </div>
                     <div class="form-group">
                         <label for="">Short Description</label>
@@ -21,8 +26,8 @@
                                 <div class="card-header">
                                     <h4>Product Data- </h4>
                                     <select name="product_type" id="product_type" class="form-control">
-                                        <option value="0">Simple Product</option>
                                         <option value="1">Variable Product</option>
+                                        <option value="0">Simple Product</option>
                                     </select>
                                 </div>
                                 <div class="card-body">
@@ -34,6 +39,7 @@
                                                 <a class="list-group-item list-group-item-action active" id="list-shipping-list" data-toggle="list" href="#list-shipping" role="tab" aria-selected="true">Shipping</a>
                                                 <a class="list-group-item list-group-item-action" id="list-attribute-list" data-toggle="list" href="#list-attribute" role="tab" aria-selected="false">Attribute</a>
                                                 <a class="list-group-item list-group-item-action" id="list-variation-list" data-toggle="list" href="#list-variation" role="tab" aria-selected="false">Variation</a>
+                                                <a class="list-group-item list-group-item-action" id="list-seo-list" data-toggle="list" href="#list-seo" role="tab" aria-selected="false">SEO</a>
                                             </div>
                                         </div>
                                         <div class="col-8">
@@ -83,7 +89,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade" id="list-attribute" role="tabpanel" aria-labelledby="list-attribute-list">
-                                                    <div class="d-flex w-50 mb-3">
+                                                    <div class="d-flex w-70 mb-3">
                                                         <select name="attribute_list" id="attribute_list" class="form-control">
                                                             <option value="">Please Select</option>
                                                             <?php foreach ($attributes as $key => $value) { ?>
@@ -91,6 +97,7 @@
                                                             <?php } ?>
                                                         </select>
                                                         <a href="javascript:void(0)" onclick="add_attribute(event);" class="btn btn-primary ml-2">Add</a>
+                                                        <a href="javascript:void(0)" onclick="create_variation();" class="btn btn-primary ml-2"> Variation</a>
                                                     </div>
                                                     <div id="accordion" class="accordian-attribute-div">
 
@@ -98,67 +105,31 @@
                                                 </div>
                                                 <div class="tab-pane fade" id="list-variation" role="tabpanel" aria-labelledby="list-variation-list">
 
-                                                    <div class="d-flex w-50 mb-3">
+                                                    <div class="d-flex w-60 mb-3">
                                                         <select name="variation_add" id="variation_add" class="form-control">
                                                             <option value="1">Create Variation From all attribute</option>
                                                         </select>
                                                         <a href="javascript:void(0)" onclick="create_variation()" class="btn btn-primary ml-2">GO</a>
                                                     </div>
                                                     <div id="accordion" class="accordian-variation-div">
-                                                        <div class="accordion customAccordian">
-                                                            <div class="accordion-header clearfix" role="button" data-toggle="collapse" data-target="#panel-body-1" aria-expanded="true">
-                                                                <label for="">Size</label>
-                                                                <select name="variation_size" id="variation_size">
-                                                                    <option value="0">Small</option>
-                                                                    <option value="1">Medium</option>
-                                                                </select>
-                                                                <label> Color </label>
-                                                                <select name="variation_color" id="variation_color">
-                                                                    <option value="0">White</option>
-                                                                    <option value="1">Green</option>
-                                                                </select>
-                                                                <div class="caret-remove">
-                                                                    <span class="down-caret"></span>
-                                                                    <a href="javascript:void(0)" class="remove_row delete">Remove</a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-1" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="list-seo" role="tabpanel" aria-labelledby="list-seo-list">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label for="">Meta Title</label>
+                                                            <input type="text" name="meta_title" id="meta_title" class="form-control">
                                                         </div>
-                                                        <div class="accordion">
-                                                            <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-2">
-                                                                <h4>Panel 2</h4>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-2" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
+                                                        <div class="col-md-6">
+                                                            <label for="">Meta Description</label>
+                                                            <input type="text" name="meta_description" id="meta_description" class="form-control">
                                                         </div>
-                                                        <div class="accordion">
-                                                            <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-3">
-                                                                <h4>Panel 3</h4>
-                                                            </div>
-                                                            <div class="accordion-body collapse" id="panel-body-3" data-parent="#accordion">
-                                                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                                            </div>
+                                                        <div class="col-md-12">
+                                                            <label for="">Meta Keywords</label>
+                                                            <select name="meta_keywords[]" id="meta_keywords" class="form-control" multiple="multiple">
+                                                            </select>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -175,8 +146,8 @@
                         </div>
                         <div class="card-body">
                             <select name="product_status" id="product_status" class="form-control">
-                                <option value="0">Active</option>
-                                <option value="1">Inactive</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </select>
                             <button class="btn btn-primary pull-right mt-3 w-50">Add</button>
                         </div>
@@ -189,6 +160,7 @@
                         <div class="card-body">
 
                             <div class="product_categories">
+
                                 <?php echo $category_view; ?>
                             </div>
                             <a href="<?= base_url('admin/common/create_category') ?>" class="href">+ Add New Category</a>
@@ -200,7 +172,7 @@
                             <h4>Product Tags</h4>
                         </div>
                         <div class="card-body">
-                            <select name="product_tags" id="product_tags" class="form-control" multiple>
+                            <select name="product_tags[]" id="product_tags" class="form-control" multiple>
                                 <?php foreach ($tags as $key => $value) { ?>
                                     <option value="<?= $value->tag_id ?>"><?= $value->tag_name ?></option>
                                 <?php } ?>
@@ -222,7 +194,7 @@
                             <h4>Product Gallery</h4>
                         </div>
                         <div class="card-body">
-                            <input type="file" name="product_gallery" id="product_gallery" class="form-control" multiple>
+                            <input type="file" name="product_gallery[]" id="product_gallery" class="form-control" multiple>
                         </div>
                     </div>
                     <div class="card mt-4">
@@ -252,22 +224,42 @@
         $('#product_tags').select2({
             placeholder: "Please Select",
         });
+        $('#meta_keywords').select2({
+            tags: true,
+            dropdownAutoWidth: true,
+            multiple: true,
+            width: 'auto',
+        });
     });
+
+    $("#product_type").change(function() {
+        var value = $(this).val();
+        if (value == 1) {
+            $("#list-attribute-list").show();
+            $("#list-variation-list").show();
+        } else {
+            $("#list-general-list").trigger('click');
+            $("#list-attribute-list").hide();
+            $("#list-variation-list").hide();
+        }
+    })
 
     function add_attribute(event) {
         var attribute_id = $("#attribute_list").val();
-        var requesturl = "<?= base_url('admin/product/generate_attribute_list') ?>";
-        $.ajax({
-            url: requesturl,
-            data: {
-                attribute_id: attribute_id
-            },
-            type: "post",
-            success: function(data) {
-                $("#attribute_list").find("[value='" + attribute_id + "']").prop("disabled", true);
-                $(".accordian-attribute-div").prepend(data);
-            }
-        });
+        if (attribute_id) {
+            var requesturl = "<?= base_url('admin/product/generate_attribute_list') ?>";
+            $.ajax({
+                url: requesturl,
+                data: {
+                    attribute_id: attribute_id
+                },
+                type: "post",
+                success: function(data) {
+                    $("#attribute_list").find("[value='" + attribute_id + "']").prop("disabled", true);
+                    $(".accordian-attribute-div").prepend(data);
+                }
+            });
+        }
     }
 
     $(document).on('click', '.delete_attribute', function() {
@@ -289,6 +281,7 @@
         $(".accordian-attribute-div .customAccordian").each(function(index, value) {
             var that = $(this);
             var select_label = $(this).find('h4').text();
+            var attribute_id = $(this).find('.delete_attribute').attr('data-id');
             var select_options = [];
             var select_value = [];
             $(this).find("input[name='attribute_value_ids[]']:checked").each(function() {
@@ -297,6 +290,7 @@
             });
             variation_object.push({
                 label: select_label,
+                attribute_id: attribute_id,
                 option: select_options,
                 option_value: select_value
             });
@@ -310,7 +304,6 @@
                 }
         }
         var generate_html = '';
-        console.log(variations);
         $.each(variations.option, function(index, valuei) {
             generate_html += `<div class='accordion customAccordian'>
                           <div class='accordion-header clearfix' role='button' data-toggle='collapse' data-target='#panel-body-${index}' aria-expanded='true'>`;
@@ -318,11 +311,9 @@
             var option_name = variations.option_value[index];
             option_id = variations.option[index].split("&-");
             option_name = variations.option_value[index].split("&-");
-            console.log(option_id);
-            console.log(option_name);
             $.each(option_id, function(index1, valuei1) {
                 generate_html += `<label>${variation_object[index1].label}</label>`;
-                generate_html += `<select name="attribute_${variation_object[index1].option[index1]}[${index}]" readonly>`;
+                generate_html += `<select name="attribute[${variation_object[index1].attribute_id}][${index}]" readonly>`;
                 $.each(variation_object[index1].option, function(index2, valuei2) {
                     if (valuei2 == valuei1) {
                         generate_html += `<option value='${valuei2}' selected>${variation_object[index1].option_value[index2]}</option>`;
@@ -334,21 +325,31 @@
             });
             generate_html += `<div class="caret-remove">
                             <span class="down-caret"></span>
-                            <a href="javascript:void(0)" class="remove_row delete">Remove</a>
+                            <a href="javascript:void(0)" class="remove_row delete delete_variation"><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </div>
                     </div>
-                    <div class="accordion-body collapse" id="panel-body-1" data-parent="#accordion">
-                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </p>
+                    <div class="accordion-body collapse" id="panel-body-${index}" data-parent="#accordion">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="">Regular Price</label>
+                            <input type="number" name="variable_regular_price[${index}]" id="variable_regular_price_${index}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Sale Price</label>
+                            <input type="number" name="variable_sale_price[${index}]" id="variable_sale_price_${index}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">SKU</label>
+                            <input type="text" name="variable_sku_price[${index}]" id="variable_sku_price_${index}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Quantity</label>
+                            <input type="number" name="variable_quantity_price[${index}]" id="variable_quantity_price_${index}" class="form-control">
+                        </div>
+                    </div>
                     </div>
                     </div>`;
         });
-        console.log("html" + generate_html);
         $(".accordian-variation-div").html(generate_html);
     }
 
@@ -377,4 +378,26 @@
         };
         return ret;
     }
+
+    $(document).on('click', '.delete_variation', function() {
+        var res = confirm("Are you sure you want to remove this variation?");
+        if (res) {
+            $(this).closest('.customAccordian').remove();
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+    // required attributed on checkbox
+    $(function() {
+        var requiredCheckboxes = $('#product_catchecklist :checkbox[required]');
+        requiredCheckboxes.change(function() {
+            if (requiredCheckboxes.is(':checked')) {
+                requiredCheckboxes.removeAttr('required');
+            } else {
+                requiredCheckboxes.attr('required', 'required');
+            }
+        });
+    });
 </script>

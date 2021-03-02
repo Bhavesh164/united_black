@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2021 at 01:25 PM
+-- Generation Time: Mar 02, 2021 at 01:26 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.1.26
 
@@ -40,7 +40,9 @@ CREATE TABLE `attribute` (
 
 INSERT INTO `attribute` (`attribute_id`, `attribute_name`, `display_name`) VALUES
 (1, 'Phone Color', 'Color'),
-(2, 'Phone Storage', 'Storage');
+(2, 'Phone Storage', 'Storage'),
+(3, 'TShirt Size', 'Size'),
+(4, 'Color', 'Color');
 
 -- --------------------------------------------------------
 
@@ -64,7 +66,13 @@ INSERT INTO `attribute_value` (`attribute_value_id`, `attribute_id`, `attribute_
 (3, '2', '256 GB'),
 (4, '1', 'Green'),
 (5, '1', 'Yellow'),
-(6, '1', 'Blue');
+(6, '1', 'Blue'),
+(7, '3', 'L'),
+(8, '3', 'S'),
+(9, '3', 'M'),
+(10, '3', 'XL'),
+(11, '4', 'Silver'),
+(12, '4', 'Golden');
 
 -- --------------------------------------------------------
 
@@ -97,7 +105,8 @@ INSERT INTO `category` (`category_id`, `parent_id`, `name`, `description`, `slug
 (4, 3, 'Samsung galaxy M1', 'samsung galaxy s1', 'samsung-galaxy-m1', '', 1, 0, 0, '2021-02-20 15:01:43', '2021-02-20 15:01:43'),
 (5, 3, 'Samsung galaxy s11', 'samsung galgaxy s11 description', 'samsung-galaxy-s11', '', 1, 0, 0, '2021-02-20 15:09:22', '2021-02-20 15:09:22'),
 (6, 2, 'Nokia', 'Nokia', 'nokia', '', 1, 0, 0, '2021-02-20 15:09:56', '2021-02-20 15:09:56'),
-(7, 6, 'Nokia 111 dfdf', 'Nokia ffdfd', 'nokia-119-hjh', '1613819652Electronic-6212c.png', 1, 0, 0, '2021-02-20 15:10:11', '2021-02-20 15:10:11');
+(7, 6, 'Nokia 111 dfdf', 'Nokia ffdfd', 'nokia-119-hjh', '1613819652Electronic-6212c.png', 1, 0, 0, '2021-02-20 15:10:11', '2021-02-20 15:10:11'),
+(8, 0, 'Jewellery', 'Jewellery', 'jewellery', '', 1, 0, 0, '2021-03-02 17:36:10', '2021-03-02 17:36:10');
 
 -- --------------------------------------------------------
 
@@ -392,6 +401,7 @@ CREATE TABLE `customer` (
 CREATE TABLE `products` (
   `product_id` int(11) NOT NULL,
   `product_name` varchar(200) NOT NULL,
+  `slug` text NOT NULL,
   `short_description` varchar(255) NOT NULL,
   `long_description` text NOT NULL,
   `meta_title` varchar(255) NOT NULL,
@@ -400,17 +410,29 @@ CREATE TABLE `products` (
   `seller_id` int(11) NOT NULL,
   `default_category_id` int(11) NOT NULL,
   `on_sale` tinyint(1) NOT NULL DEFAULT '1',
+  `sku` varchar(100) NOT NULL,
   `quantity` int(11) NOT NULL,
   `regular_price` decimal(10,2) NOT NULL,
   `sale_price` decimal(10,2) NOT NULL,
   `product_type` tinyint(1) NOT NULL COMMENT '0:Simple Product 1: Variable Product',
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `product_image` varchar(255) NOT NULL,
+  `shipping_weight` varchar(100) NOT NULL,
+  `shipping_length` varchar(100) NOT NULL,
+  `shipping_width` varchar(100) NOT NULL,
+  `shipping_height` varchar(100) NOT NULL,
   `is_featured` tinyint(1) NOT NULL DEFAULT '0',
-  `slug` text NOT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`product_id`, `product_name`, `slug`, `short_description`, `long_description`, `meta_title`, `meta_description`, `meta_keywords`, `seller_id`, `default_category_id`, `on_sale`, `sku`, `quantity`, `regular_price`, `sale_price`, `product_type`, `active`, `product_image`, `shipping_weight`, `shipping_length`, `shipping_width`, `shipping_height`, `is_featured`, `created_on`, `updated_on`) VALUES
+(1, 'I Phone 12', 'i-phone-12', '<p>I Phone 12 short description</p>', '<p>I Phone 12 long description<br></p>', 'I Phone', 'I Phone Desc', 'iphone12,iphone12 pro', 1, 0, 1, 'fsdfs', 100, '1100.00', '1200.00', 1, 1, '1614685791iphone.jpg', '20', '30', '40', '50', 0, '2021-03-02 12:49:51', '2021-03-02 12:49:51'),
+(2, 'Kalyan Jewellery Chain', 'kalyan-jewellery-chain', '<p>Kalyan Jewellery Chain short description<br></p>', '<p>Kalyan Jewellery Chain long description<br></p>', 'Jewellery', 'Jewellery desc', 'chain', 1, 0, 1, 'cdsw', 150, '110.00', '1200.00', 1, 1, '1614686704golden.jpg', '10', '20', '30', '40', 0, '2021-03-02 13:05:04', '2021-03-02 13:05:04');
 
 -- --------------------------------------------------------
 
@@ -423,6 +445,7 @@ CREATE TABLE `product_attribute` (
   `product_id` int(11) NOT NULL DEFAULT '0',
   `seller_id` int(11) NOT NULL,
   `default_on` tinytext NOT NULL,
+  `sku` varchar(100) NOT NULL,
   `quantity` int(11) NOT NULL,
   `regular_price` decimal(10,2) NOT NULL,
   `sale_price` decimal(10,2) NOT NULL,
@@ -431,6 +454,18 @@ CREATE TABLE `product_attribute` (
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `product_attribute`
+--
+
+INSERT INTO `product_attribute` (`product_attribute_id`, `product_id`, `seller_id`, `default_on`, `sku`, `quantity`, `regular_price`, `sale_price`, `image`, `created_on`, `updated_on`) VALUES
+(1, 1, 1, '0', 'sdfswe', 150, '1500.00', '1600.00', '', '2021-03-02 17:19:51', '2021-03-02 17:19:51'),
+(2, 1, 1, '0', 'sdfwer', 100, '1500.00', '1600.00', '', '2021-03-02 17:19:51', '2021-03-02 17:19:51'),
+(3, 1, 1, '0', 'sdf', 80, '1900.00', '2000.00', '', '2021-03-02 17:19:51', '2021-03-02 17:19:51'),
+(4, 1, 1, '0', 'dfe', 60, '1900.00', '2000.00', '', '2021-03-02 17:19:51', '2021-03-02 17:19:51'),
+(5, 2, 1, '0', 'dfs', 10, '50.00', '100.00', '', '2021-03-02 17:35:04', '2021-03-02 17:35:04'),
+(6, 2, 1, '0', 'dfer', 20, '80.00', '120.00', '', '2021-03-02 17:35:04', '2021-03-02 17:35:04');
+
 -- --------------------------------------------------------
 
 --
@@ -438,9 +473,27 @@ CREATE TABLE `product_attribute` (
 --
 
 CREATE TABLE `product_attribute_combination` (
-  `attribute_id` int(10) UNSIGNED NOT NULL,
-  `product_attribute_id` int(10) UNSIGNED NOT NULL
+  `product_attribute_combination_id` bigint(20) NOT NULL,
+  `product_attribute_id` int(11) NOT NULL,
+  `attribute_id` int(11) NOT NULL,
+  `attribute_value_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_attribute_combination`
+--
+
+INSERT INTO `product_attribute_combination` (`product_attribute_combination_id`, `product_attribute_id`, `attribute_id`, `attribute_value_id`) VALUES
+(1, 1, 2, 2),
+(2, 2, 2, 2),
+(3, 3, 2, 3),
+(4, 4, 2, 3),
+(5, 1, 1, 5),
+(6, 2, 1, 6),
+(7, 3, 1, 5),
+(8, 4, 1, 6),
+(9, 5, 4, 11),
+(10, 6, 4, 12);
 
 -- --------------------------------------------------------
 
@@ -449,10 +502,40 @@ CREATE TABLE `product_attribute_combination` (
 --
 
 CREATE TABLE `product_category` (
-  `category_id` int(10) UNSIGNED NOT NULL,
-  `product_id` int(10) UNSIGNED NOT NULL,
-  `position` int(10) UNSIGNED NOT NULL DEFAULT '0'
+  `product_category_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_category`
+--
+
+INSERT INTO `product_category` (`product_category_id`, `category_id`, `product_id`, `position`) VALUES
+(1, 1, 1, 0),
+(2, 2, 1, 0),
+(3, 1, 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_gallery_images`
+--
+
+CREATE TABLE `product_gallery_images` (
+  `product_gallery_image_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `image` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_gallery_images`
+--
+
+INSERT INTO `product_gallery_images` (`product_gallery_image_id`, `product_id`, `image`) VALUES
+(1, 1, '1614685791iphone_gallery.jpg'),
+(2, 1, '1614685791iphone_gallery2.jpg');
 
 -- --------------------------------------------------------
 
@@ -461,9 +544,19 @@ CREATE TABLE `product_category` (
 --
 
 CREATE TABLE `product_tags` (
+  `product_tag_id` bigint(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_tags`
+--
+
+INSERT INTO `product_tags` (`product_tag_id`, `product_id`, `tag_id`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -532,7 +625,7 @@ CREATE TABLE `seller` (
 --
 
 INSERT INTO `seller` (`seller_id`, `username`, `email`, `password`, `fname`, `lname`, `city`, `state_id`, `zipcode`, `country_id`, `is_active`, `last_login_on`, `cov_picture`, `phone_no`, `address`, `gender`, `business_reg_no`, `vat_file`, `vat_registered`, `seller_vat`, `company_name`, `bank_name`, `bank_code`, `account_name`, `iban`, `bank_info`, `account_no`, `bvn_number`, `shop_name`, `created_on`, `updated_on`) VALUES
-(1, 'rahul', 'rahul@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'Rahul', 'Sharma', 'Jalandhar', 12, '123456', 21, '0', '0000-00-00 00:00:00', '1614063061logo.png', '1234567980', 'test', 0, 'sdf', 'wer', 1, 'sfd', 'wer', 'wer', 'sdf', 'wer', 'wer', 'wer', 'wer', 'wer', 'test shop', '2021-02-23 07:56:50', '2021-02-23 07:56:50');
+(1, 'rahul', 'rahul@gmail.com', 'e10adc3949ba59abbe56e057f20f883e', 'Rahul', 'Sharma', 'Jalandhar', 12, '123456', 21, '1', '0000-00-00 00:00:00', '1614063061logo.png', '1234567980', 'test', 0, 'sdf', 'wer', 1, 'sfd', 'wer', 'wer', 'sdf', 'wer', 'wer', 'wer', 'wer', 'wer', 'test shop', '2021-02-23 07:56:50', '2021-02-23 07:56:50');
 
 -- --------------------------------------------------------
 
@@ -1032,19 +1125,25 @@ ALTER TABLE `product_attribute`
 -- Indexes for table `product_attribute_combination`
 --
 ALTER TABLE `product_attribute_combination`
-  ADD PRIMARY KEY (`attribute_id`,`product_attribute_id`);
+  ADD PRIMARY KEY (`product_attribute_combination_id`);
 
 --
 -- Indexes for table `product_category`
 --
 ALTER TABLE `product_category`
-  ADD PRIMARY KEY (`category_id`,`product_id`);
+  ADD PRIMARY KEY (`product_category_id`);
+
+--
+-- Indexes for table `product_gallery_images`
+--
+ALTER TABLE `product_gallery_images`
+  ADD PRIMARY KEY (`product_gallery_image_id`);
 
 --
 -- Indexes for table `product_tags`
 --
 ALTER TABLE `product_tags`
-  ADD PRIMARY KEY (`product_id`,`tag_id`);
+  ADD PRIMARY KEY (`product_tag_id`);
 
 --
 -- Indexes for table `roles`
@@ -1096,19 +1195,19 @@ ALTER TABLE `user_to_role`
 -- AUTO_INCREMENT for table `attribute`
 --
 ALTER TABLE `attribute`
-  MODIFY `attribute_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `attribute_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `attribute_value`
 --
 ALTER TABLE `attribute_value`
-  MODIFY `attribute_value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `attribute_value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `country`
@@ -1126,13 +1225,37 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product_attribute`
 --
 ALTER TABLE `product_attribute`
-  MODIFY `product_attribute_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `product_attribute_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `product_attribute_combination`
+--
+ALTER TABLE `product_attribute_combination`
+  MODIFY `product_attribute_combination_id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `product_category`
+--
+ALTER TABLE `product_category`
+  MODIFY `product_category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `product_gallery_images`
+--
+ALTER TABLE `product_gallery_images`
+  MODIFY `product_gallery_image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `product_tags`
+--
+ALTER TABLE `product_tags`
+  MODIFY `product_tag_id` bigint(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`

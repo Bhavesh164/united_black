@@ -105,6 +105,20 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    public function check_unique_product_slug($slug, $product_id = '')
+    {
+        $query = "select count(product_id) as count from products where slug='$slug'";
+        if ($product_id != '') {
+            $query .= " and product_id!=$product_id";
+        }
+        $res = $this->db->query($query)->row()->count;
+        if ($res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function delete_image($path, $file)
     {
         $img_path = FCPATH . "/" . $path . $file;
@@ -203,6 +217,62 @@ class MY_Controller extends CI_Controller
         return $response;
     }
 
+    public function upload_images($files, $path, $thumb_w = 175, $thumb_h = 175)
+    {
+        if (!file_exists($path . "thumb")) {
+            mkdir($path . "thumb", 0777, true);
+        }
+        $config = array(
+            'upload_path'   => FCPATH . '/' . $path,
+            'allowed_types' => 'gif|jpg|png|jpeg',
+            'overwrite'     => 1,
+        );
+
+        $this->load->library('upload', $config);
+
+        $images = array();
+
+        foreach ($files['name'] as $key => $image) {
+            $_FILES['images[]']['name'] = $files['name'][$key];
+            $_FILES['images[]']['type'] = $files['type'][$key];
+            $_FILES['images[]']['tmp_name'] = $files['tmp_name'][$key];
+            $_FILES['images[]']['error'] = $files['error'][$key];
+            $_FILES['images[]']['size'] = $files['size'][$key];
+
+            $fileName = time()  . $image;
+
+            $images[] = $fileName;
+
+            $config['file_name'] = $fileName;
+
+            $this->upload->initialize($config);
+            $status = 0;
+            if ($this->upload->do_upload('images[]')) {
+                $status = 1;
+                $this->upload->data();
+                //*create thumbnail //
+                $thumb = array();
+                $thumb['image_library'] = 'gd2';
+                $thumb['source_image'] = FCPATH . '/' . $path . $fileName;
+                $thumb['new_image'] = FCPATH . '/' . $path . 'thumb/'; // path where you want to save thumnail
+                $thumb['create_thumb'] = TRUE;
+                $thumb['thumb_marker'] = '';
+                $thumb['maintain_ratio'] = TRUE;
+                $thumb['width']         = $thumb_w;
+                $thumb['height']       = $thumb_h;
+                $this->load->library('image_lib', $thumb);
+                $this->image_lib->initialize($thumb);
+                $this->image_lib->resize();
+                $this->image_lib->clear();
+                //create thumbanil
+            } else {
+                return false;
+            }
+        }
+        $response = array("status" => $status, "filename" => $images);
+        return $response;
+    }
+
     protected function getCategoryTree($level = 0, $prefix = '')
     {
         global $category_tree;
@@ -288,10 +358,10 @@ class MY_Controller extends CI_Controller
             }
             foreach ($category['parent_cats'][$parent] as $cat_id) {
                 if (!isset($category['parent_cats'][$cat_id])) {
-                    $html .= "<li>\n  <label><input type='checkbox'  value='" . $category['categories'][$cat_id]['category_id'] . "'>" . $category['categories'][$cat_id]['name'] . "</label>\n</li> \n";
+                    $html .= "<li>\n  <label><input type='checkbox' name='category[]'  value='" . $category['categories'][$cat_id]['category_id'] . "' required>" . $category['categories'][$cat_id]['name'] . "</label>\n</li> \n";
                 }
                 if (isset($category['parent_cats'][$cat_id])) {
-                    $html .= "<li>\n  <label><input type='checkbox' value='" . $category['categories'][$cat_id]['category_id'] . "'>" . $category['categories'][$cat_id]['name'] . "</label>\n \n";
+                    $html .= "<li>\n  <label><input type='checkbox' name='category[]' value='" . $category['categories'][$cat_id]['category_id'] . "' required>" . $category['categories'][$cat_id]['name'] . "</label>\n \n";
                     $html .= $this->buildCategory($cat_id, $category, $counter);
                     $html .= "</li> \n";
                 }
